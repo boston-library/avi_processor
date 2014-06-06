@@ -32,6 +32,8 @@ omniauth-polaris.yml
 bpl_config.yml
 omniauth-facebook.yml
 hydra_derivatives.yml
+redis.yml
+resque-pool.yml
 
 # Files to ignore by default in Git #
 #####################################

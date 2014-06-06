@@ -50,4 +50,13 @@ gem 'hydra-head'
 #gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'
 
-gem "resque", "~> 2.0.0.pre.1", github: "resque/resque"
+#gem "resque", "~> 2.0.0.pre.1", github: "resque/resque"
+gem "resque", '~> 1.23'
+
+gem 'resque-pool', '0.3.0'
+
+gem 'rake'
+
+gem 'hydra-derivatives'
+
+gem 'nest', '~> 1.1.1'

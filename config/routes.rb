@@ -1,11 +1,15 @@
+require 'resque/server'
+
 AviProcessor::Application.routes.draw do
+
+  mount Resque::Server.new, :at => "/resque"
+
   get "processor/bypid"
   get "processor/bycollection"
   get "processor/byinstitution"
   get "processor/byfile"
-  get "image_processor/bypid"
-  get "image_processor/bycollection"
-  get "image_processor/byfile"
+
+  post "processor/byobject"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
