@@ -33,8 +33,8 @@ class Derivatives
       end
 
       #if args[:is_new] == "true"
+      object = Bplmodels::ObjectBase.find(args["object_pid"]).adapt_to_cmodel
       if object.workflowMetadata.item_status.processing != ["complete"]
-        object = Bplmodels::ObjectBase.find(args["object_pid"]).adapt_to_cmodel
         object.workflowMetadata.item_status.processing = "complete"
         object.workflowMetadata.item_status.processing_comment = "Object Processing Complete"
         object.save

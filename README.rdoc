@@ -49,3 +49,11 @@ TO BE ADDED:
 Redis server setup (including redis-server command)
 
 database.yml setup
+
+OTHER SETUP:
+
+RAIL_ENV=production resque-pool -environment production
+
+Make sure to set LD_LIBRARY_PATH and the path of KDU as broken otherwise.
+
+Set KDU and Fits permissions to 775.
