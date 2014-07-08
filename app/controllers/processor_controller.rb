@@ -25,7 +25,7 @@ class ProcessorController < ApplicationController
 
     is_new = true if params[:new].present? && params[:new] == "true"
 
-    result = Resque.enqueue(Derivatives, :object_pid=>params[:pid], :is_new=>is_new)
+    result = Resque.enqueue(Derivatives, :object_pid=>params[:pid], :is_new=>is_new, :environment=>params[:environment])
 
     respond_to do |format|
       if result

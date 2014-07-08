@@ -43,3 +43,9 @@ Mostly these are all configured in hydra_derivatives.yml.
 
 For additional options, see: https://github.com/projecthydra-labs/hydra-derivatives/blob/master/README.md
 
+
+TO BE ADDED:
+
+Redis server setup (including redis-server command)
+
+database.yml setup
