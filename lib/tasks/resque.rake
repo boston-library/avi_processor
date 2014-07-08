@@ -11,3 +11,10 @@ task 'resque:pool:setup' do
     Resque.redis.client.reconnect
   end
 end
+
+task :resque_stop do
+  pid_file = 'tmp/pids/resque-pool.pid'
+  pid = File.read(pid_file).to_i
+  Process.kill 9, pid
+  File.delete pid_file
+end

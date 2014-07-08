@@ -4,7 +4,7 @@ class Derivatives
   def self.perform(*args)
     args = args.first
 
-    raise "Environment argument missing!" if args[:environment.blank?]
+    raise "Environment argument missing!" if args[:environment].blank?
 
     #FIXME: What happens with multiple jobs?
     #https://github.com/projecthydra/active_fedora/blob/9aab861ef0918fe93ca5bd8dcfcf4da818aab505/lib/active_fedora/file_configurator.rb
