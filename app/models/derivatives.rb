@@ -28,6 +28,7 @@ class Derivatives
           file_object = Bplmodels::File.find(image_id['id']).adapt_to_cmodel
           file_object.characterize #if args[:is_new] == "true"
           file_object.generate_derivatives
+          file_object.accessMaster
           file_object.save
         }
       end

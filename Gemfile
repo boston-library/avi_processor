@@ -57,6 +57,7 @@ gem 'resque-pool', '0.3.0'
 
 gem 'rake'
 
+gem 'mini_magick', :git => 'https://github.com/mrkamel/minimagick.git', :branch => 'format_tempfile_fix'
 gem 'hydra-derivatives'
 
 gem 'nest', '~> 1.1.1'
