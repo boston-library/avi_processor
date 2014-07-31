@@ -47,8 +47,8 @@ end
 # HYDRA Dependencies
 gem 'hydra-head'
 
-#gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
-gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'
+gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
+#gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'
 
 #gem "resque", "~> 2.0.0.pre.1", github: "resque/resque"
 gem "resque", '~> 1.23'
