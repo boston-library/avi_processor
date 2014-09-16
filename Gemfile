@@ -62,3 +62,5 @@ gem 'mini_magick', :git => 'https://github.com/minimagick/minimagick.git'
 gem 'hydra-derivatives'
 
 gem 'nest', '~> 1.1.1'
+
+gem 'rmagick', :require => 'RMagick'
