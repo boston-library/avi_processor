@@ -45,5 +45,18 @@ class ProcessorController < ApplicationController
   end
 
   def byfile
+    is_new = false
+
+    is_new = true if params[:new].present? && params[:new] == "true"
+
+    result = Resque.enqueue(Derivatives, :file_pid=>params[:pid], :is_new=>is_new, :environment=>params[:environment])
+
+    respond_to do |format|
+      if result
+        format.json { render json: {"result" => true}.as_json, status: :created }
+      else
+        format.json { render json: {"result" => false}.as_json, status: :unprocessable_entity }
+      end
+    end
   end
 end

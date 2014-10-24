@@ -18,10 +18,14 @@ class Derivatives
 
 
     if args.has_key?("file_pid")
-      object = Bplmodels::File.find(args["file_pid"]).adapt_to_cmodel
-      object.characterize #if args[:is_new] == "true"
-      object.generate_derivatives
-      object.save
+      file_object = Bplmodels::File.find(args["file_pid"]).adapt_to_cmodel
+      file_object.characterize if args[:is_new] == "true" || args[:is_new] == true
+      if file_object.accessMaster.present? && file_object.accessMaster.versions.length >= 1
+        file_object.accessMaster.delete
+        file_object.save
+      end
+      file_object.generate_derivatives
+      file_object.save
     elsif args.has_key?("object_pid")
       Bplmodels::File.find_in_batches('is_file_of_ssim'=>"info:fedora/#{args["object_pid"]}") do |group|
         group.each { |image_id|
