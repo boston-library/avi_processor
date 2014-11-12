@@ -33,23 +33,25 @@ max_age=65 # minutes
 usage=$(current_usage)
 start_size=$usage
 run=1
-while [ $usage -gt $REDUCE_TO ] && [ $max_age -ge -1 ]; do
-	run=0
+#while [ $usage -gt $REDUCE_TO ] && [ $max_age -ge -1 ]; do
+#run=0	
 
 	# files. loop (instead of -delete) so that we can keep count
 	for f in $(find $IMG_CACHE_DIR -maxdepth 1 -name mini* -type f -amin +$max_age); do
+                run=0
 		rm $f
 		let delete_total+=1
 	done
 
 	for f in $(find $IMG_CACHE_DIR -maxdepth 1 -name suf* -type f -amin +$max_age); do
+                run=0
 		rm $f
 		let delete_total+=1
 	done
 
-	let max_age-=5
+	#let max_age-=5
 	usage=$(current_usage)
-done
+#done
 
 echo -ne "$(date +[%c]) " >> $LOG
 if [ $run == 0 ]; then
