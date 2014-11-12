@@ -12,7 +12,7 @@ LOG="/var/log/avi/tmp_clean.log"
 IMG_CACHE_DIR="/tmp"
 
 # ...is below a certain size...
-REDUCE_TO=50048576 #50 gb
+REDUCE_TO=100048576 #10 gb
 # REDUCE_TO=1073741824 # 1 TB
 # REDUCE_TO=2147483648 # 2 TB
 
@@ -29,7 +29,7 @@ current_usage () {
 }
 
 delete_total=0
-max_age=60 # minutes
+max_age=65 # minutes
 usage=$(current_usage)
 start_size=$usage
 run=1
@@ -47,7 +47,7 @@ while [ $usage -gt $REDUCE_TO ] && [ $max_age -ge -1 ]; do
 		let delete_total+=1
 	done
 
-	let max_age-=1
+	let max_age-=5
 	usage=$(current_usage)
 done
 
