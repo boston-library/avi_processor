@@ -14,13 +14,21 @@ class Thumbnail
 
     ActiveFedora.init(:environment=>args["environment"])
 
+    url_list = []
+    temp_url_list = ""
+    temp_url_list = args["image_urls"] if args["image_urls"].present?
+
+    temp_url_list.split('||').each do |url|
+      url_list << url
+    end
+
     if args["system_type"] == "omeka"
       img = nil
       @thumbnail_url = nil
       @object = Bplmodels::ObjectBase.find(args["object_pid"]).adapt_to_cmodel
 
       #For SAIL, the following url doesn't work in ImageMagick if URL not escaped...
-      args["image_urls"].each do |url|
+      url_list.each do |url|
         url = url.gsub('[','%5B').gsub(']','%5D')
 
         if @thumbnail_url.blank? && !AUDIO_TYPES.include?(url.split('.').last) || !(url.include?('amazonaws') && url.include?('.mp3')) #http://moakleyarchive.omeka.net/items/show/377 is mp3
@@ -95,7 +103,7 @@ class Thumbnail
       end
 
     elsif args["system_type"] == "generic"
-      if args["image_urls"].present?
+      if url_list.present?
         max_retry = 2
         sleep_time = 60 # In seconds
         retry_count = 0
@@ -103,7 +111,6 @@ class Thumbnail
         current_page = 0
         total_colors = 0
 
-        url_list = args["image_urls"]
         url = url_list.first
 
         img = nil
