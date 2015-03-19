@@ -161,7 +161,7 @@ class Thumbnail
                 current_error += "Error message: #{error.message}\n"
                 current_error += "Error backtrace: #{error.backtrace}\n"
 
-                logger.error current_error
+                #Resque.logger.error current_error
 
                 raise current_error
               end
