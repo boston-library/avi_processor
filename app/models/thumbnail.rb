@@ -79,7 +79,9 @@ class Thumbnail
               @thumbnail_url = url.gsub('/files/', '/square_thumbnails/').gsub(/\.\w+$/, '') + '.jpg'
               img =  Magick::Image.read(@thumbnail_url).first
             else
-              @thumbnail_url = @object.generate_thumbnail_url
+              #@thumbnail_url = @object.generate_thumbnail_url
+              #FIXME:
+              @thumbnail_url = 'https://search-hydratest.bpl.org' + '/ark:/' + '50959' + "/" + @object.pid.split(':').last.to_s + "/thumbnail"
               img =  Magick::Image.read(url).first
             end
           end
