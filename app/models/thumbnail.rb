@@ -24,7 +24,7 @@ class Thumbnail
 
     img = nil
     @thumbnail_url = nil
-    @object = Bplmodels::ObjectBase.find(args["object_pid"]).adapt_to_cmodel
+    @object = ActiveFedora::Base.find(args["object_pid"]).adapt_to_cmodel
 
     if args["system_type"] == "omeka" && url_list.present?
 
