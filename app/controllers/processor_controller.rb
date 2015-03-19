@@ -45,7 +45,7 @@ class ProcessorController < ApplicationController
     is_new = true if params[:new].present? && params[:new] == "true"
     thumbnail_url = params[:thumbnail_url] if params[:thumbnail_url].present?
 
-    result = Resque.enqueue(OAIThumbnail, :object_pid=>params[:pid], :is_new=>is_new, :environment=>params[:environment], :system_type=>params[:system_type], :image_urls=>params[:image_urls], :thumbnail_url=>thumbnail_url)
+    result = Resque.enqueue(OaiThumbnail, :object_pid=>params[:pid], :is_new=>is_new, :environment=>params[:environment], :system_type=>params[:system_type], :image_urls=>params[:image_urls], :thumbnail_url=>thumbnail_url)
 
     respond_to do |format|
       if result
