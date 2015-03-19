@@ -22,10 +22,11 @@ class Thumbnail
       url_list << url
     end
 
-    if args["system_type"] == "omeka"
-      img = nil
-      @thumbnail_url = nil
-      @object = Bplmodels::ObjectBase.find(args["object_pid"]).adapt_to_cmodel
+    img = nil
+    @thumbnail_url = nil
+    @object = Bplmodels::ObjectBase.find(args["object_pid"]).adapt_to_cmodel
+
+    if args["system_type"] == "omeka" && url_list.present?
 
       #For SAIL, the following url doesn't work in ImageMagick if URL not escaped...
       url_list.each do |url|
@@ -102,8 +103,8 @@ class Thumbnail
 
       end
 
-    elsif args["system_type"] == "generic"
-      if url_list.present?
+    elsif args["system_type"] == "generic" && url_list.present?
+
         max_retry = 2
         sleep_time = 60 # In seconds
         retry_count = 0
@@ -205,7 +206,7 @@ class Thumbnail
           @object.add_relationship(:is_exemplary_image_of, "info:fedora/" + @object.pid)
 
 
-        end
+
       end
 
 
