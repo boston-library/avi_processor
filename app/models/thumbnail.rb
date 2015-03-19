@@ -216,7 +216,7 @@ class Thumbnail
 
   end
 
-  if object.workflowMetadata.item_status.processing != ["complete"]
+  if @object.workflowMetadata.item_status.processing != ["complete"]
     @object.workflowMetadata.item_status.processing = "complete"
     @object.workflowMetadata.item_status.processing_comment = "Object Processing Complete"
   end
