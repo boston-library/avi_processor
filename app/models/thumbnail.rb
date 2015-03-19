@@ -221,7 +221,8 @@ class Thumbnail
     @object.workflowMetadata.item_status.processing_comment = "Object Processing Complete"
   end
 
-  @object.save!
-  @object.save! #Need to call it twice so that exemplary_image is populated as won't be in solr to be found.
+  @object.save
+  @object.save
+  #Need to call it twice so that exemplary_image is populated as won't be in solr to be found.
   end
 end
