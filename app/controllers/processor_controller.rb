@@ -38,6 +38,24 @@ class ProcessorController < ApplicationController
     #Resque.enqueue(Derivatives, :object_pid=>'steventest:22')
   end
 
+  def oaithumbnail
+    is_new = false
+    thumbnail_url = nil
+
+    is_new = true if params[:new].present? && params[:new] == "true"
+    thumbnail_url = params[:thumbnail_url] if params[:thumbnail_url].present?
+
+    result = Resque.enqueue(OAIThumbnail, :object_pid=>params[:pid], :is_new=>is_new, :environment=>params[:environment], :system_type=>params[:system_type], :image_urls=>params[:image_urls], :thumbnail_url=>thumbnail_url)
+
+    respond_to do |format|
+      if result
+        format.json { render json: {"result" => true}.as_json, status: :created }
+      else
+        format.json { render json: {"result" => false}.as_json, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def bycollection
   end
 
