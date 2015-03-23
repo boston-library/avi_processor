@@ -13,6 +13,7 @@ class Thumbnail
     raise "Environment argument missing!" if args["environment"].blank?
 
     ActiveFedora.init(:environment=>args["environment"])
+    config_hash = YAML.load_file(Rails.root.join('config', 'ark.yml'))[args["environment"]] #FIXME: Do this better
 
     url_list = []
     temp_url_list = ""
@@ -51,7 +52,6 @@ class Thumbnail
             until total_colors > 1 do
               current_page = current_page + 1
 
-
               if url.include?('amazonaws') #Can't do paging as signature is off then 0.o
                 img = Magick::Image.read(url){
                   self.quality = 100
@@ -67,7 +67,7 @@ class Thumbnail
               total_colors = img.total_colors
             end
 
-            @thumbnail_url = @object.generate_thumbnail_url
+            @thumbnail_url = @object.generate_thumbnail_url(config_hash)
           else
 
             #Amazonaws requires a special token so unable to access thumbnails directly...
@@ -82,7 +82,7 @@ class Thumbnail
             else
               #@thumbnail_url = @object.generate_thumbnail_url
               #FIXME:
-              @thumbnail_url = 'https://search-hydratest.bpl.org' + '/ark:/' + '50959' + "/" + @object.pid.split(':').last.to_s + "/thumbnail"
+              @thumbnail_url = @object.generate_thumbnail_url(config_hash)
               img =  Magick::Image.read(url).first
             end
           end
@@ -205,7 +205,7 @@ class Thumbnail
           #@thumbnail_url = args["thumbnail_url"].present? ? args["thumbnail_url"] : @object.generate_thumbnail_url #Generate the thumbnail url
           #FIXME: Temporary... no ARK Config...
 
-          @thumbnail_url = args["thumbnail_url"].present? ? args["thumbnail_url"] : 'https://search-hydratest.bpl.org' + '/ark:/' + '50959' + "/" + @object.pid.split(':').last.to_s + "/thumbnail"
+          @thumbnail_url = args["thumbnail_url"].present? ? args["thumbnail_url"] : @object.generate_thumbnail_url(config_hash)
           @object.descMetadata.insert_location_url(@thumbnail_url, nil, 'preview')
           @object.add_relationship(:is_image_of, "info:fedora/" + @object.pid)
           @object.add_relationship(:is_exemplary_image_of, "info:fedora/" + @object.pid)
