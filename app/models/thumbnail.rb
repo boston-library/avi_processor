@@ -30,9 +30,10 @@ class Thumbnail
 
       #For SAIL, the following url doesn't work in ImageMagick if URL not escaped...
       url_list.each do |url|
+
         url = url.gsub('[','%5B').gsub(']','%5D')
 
-        if @thumbnail_url.blank? && !AUDIO_TYPES.include?(url.split('.').last) || !(url.include?('amazonaws') && url.include?('.mp3')) #http://moakleyarchive.omeka.net/items/show/377 is mp3
+        if @thumbnail_url.blank? && !AUDIO_TYPES.include?(url.split('.').last) && !(url.include?('amazonaws') && url.downcase.include?('.mp3')) #http://moakleyarchive.omeka.net/items/show/377 is mp3
           if TEXT_TYPES.include?(url.split('.').last) || (url.include?('amazonaws') && (url.include?('.pdf') || url.include?('.doc') || url.include?('.docx')))
 
             if url.include?('.docx') || url.include?('.doc')
