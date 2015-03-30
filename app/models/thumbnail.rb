@@ -14,6 +14,7 @@ class Thumbnail
 
     ActiveFedora.init(:environment=>args["environment"])
     config_hash = YAML.load_file(Rails.root.join('config', 'ark.yml'))[args["environment"]] #FIXME: Do this better
+    raise "Ark config incorrect for environment: " + args["environment"] if config_hash.blank?
 
     url_list = []
     temp_url_list = ""
@@ -206,7 +207,7 @@ class Thumbnail
           #FIXME: Temporary... no ARK Config...
 
           @thumbnail_url = args["thumbnail_url"].present? ? args["thumbnail_url"] : @object.generate_thumbnail_url(config_hash)
-          @object.descMetadata.insert_location_url(@thumbnail_url, nil, 'preview')
+          @object.descMetadata.insert_location_url(@thumbnail_url, 'preview', nil)
           @object.add_relationship(:is_image_of, "info:fedora/" + @object.pid)
           @object.add_relationship(:is_exemplary_image_of, "info:fedora/" + @object.pid)
 
