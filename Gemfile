@@ -45,7 +45,8 @@ end
 # gem 'debugger', group: [:development, :test]
 
 # HYDRA Dependencies
-gem 'hydra-head'
+gem 'hydra-head', '7.0.1'
+gem 'active-fedora', '7.0.4'
 
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 #gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'
