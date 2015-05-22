@@ -20,10 +20,12 @@ class Derivatives
     if args.has_key?("file_pid")
       file_object = Bplmodels::File.find(args["file_pid"]).adapt_to_cmodel
       file_object.characterize if args[:is_new] == "true" || args[:is_new] == true
+=begin
       if file_object.accessMaster.present? && file_object.accessMaster.versions.length >= 1
         file_object.accessMaster.delete
         file_object.save
       end
+=end
       file_object.generate_derivatives
       file_object.save
     elsif args.has_key?("object_pid")
