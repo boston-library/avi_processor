@@ -7,6 +7,7 @@ AviProcessor::Application.routes.draw do
   get "processor/bypid"
   get "processor/bycollection"
   get "processor/byinstitution"
+  post "processor/byfile"
   get "processor/byfile"
 
   post "processor/byobject"
