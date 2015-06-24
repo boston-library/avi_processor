@@ -80,7 +80,7 @@ class ProcessorController < ApplicationController
 
 
   def objectcacheinvalidation
-    result = Resque.enqueue(CacheInvalidate, :object_pid=>params[:pid])
+    result = Resque.enqueue(::CacheInvalidate, :object_pid=>params[:pid])
 
     respond_to do |format|
       if result
