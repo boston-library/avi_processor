@@ -77,4 +77,17 @@ class ProcessorController < ApplicationController
       end
     end
   end
+
+
+  def objectcacheinvalidation
+    result = Resque.enqueue(CacheInvalidate, :object_pid=>params[:pid])
+
+    respond_to do |format|
+      if result
+        format.json { render json: {"result" => true}.as_json, status: :created }
+      else
+        format.json { render json: {"result" => false}.as_json, status: :unprocessable_entity }
+      end
+    end
+  end
 end

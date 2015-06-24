@@ -16,6 +16,9 @@ AviProcessor::Application.routes.draw do
   post "processor/oaithumbnail"
   get "processor/oaithumbnail"
 
+  post "processor/objectcacheinvalidation"
+  get "processor/objectcacheinvalidation"
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
