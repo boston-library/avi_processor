@@ -6,6 +6,7 @@
   fedora-relations-model: info:fedora/fedora-system:def/relations-external#
   commonwealth-rel: http://projecthydra.org/ns/relations#
   oai: http://www.openarchives.org/OAI/2.0/
+  pcdm: http://pcdm.org/models#
 
 # namespace mappings--- 
 # you can add specific mappings for your institution by providing the following:
@@ -73,3 +74,5 @@
     :is_following_document_of: isFollowingDocumentOf
     :is_preceding_document_of: isPrecedingDocumentOf
     :is_transcription_of: isTranscriptionOf
+  http://pcdm.org/models#:
+    :administrative_set: AdministrativeSet
