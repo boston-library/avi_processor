@@ -1,4 +1,4 @@
 MiniMagick.configure do |config|
   config.cli = :imagemagick
-  config.timeout = 210
+  config.timeout = 1200
 end
