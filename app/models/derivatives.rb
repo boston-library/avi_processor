@@ -35,7 +35,7 @@ class Derivatives
           file_object.characterize #if args[:is_new] == "true"
           file_object.generate_derivatives
           file_object.save
-          sleep(0.1)
+          sleep(0.2)
         }
       end
 
