@@ -59,8 +59,11 @@ gem 'resque-pool', '0.5.0'
 gem 'rake'
 
 #gem 'mini_magick', :git => 'https://github.com/mrkamel/minimagick.git', :branch => 'format_tempfile_fix2'
-gem 'mini_magick', :git => 'https://github.com/minimagick/minimagick.git'
-gem 'hydra-derivatives'
+#gem 'mini_magick', :git => 'https://github.com/minimagick/minimagick.git'
+gem 'mini_magick', '4.2.10'
+
+#gem 'hydra-derivatives'
+gem 'hydra-derivatives', :git=> 'https://github.com/NLIreland/hydra-derivatives.git', :branch=> 'nli'
 
 gem 'nest', '~> 1.1.1'
 
