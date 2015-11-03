@@ -70,4 +70,4 @@ gem 'nest', '~> 1.1.1'
 
 gem 'rmagick', :require => 'RMagick'
 
-gem 'hydra-file_chracterization', :git=> 'https://github.com/boston-library/hydra-file_characterization.git', :branch=>'posix_spawn'
+gem 'hydra-file_characterization', :git=> 'https://github.com/boston-library/hydra-file_characterization.git', :branch=>'posix_spawn'
