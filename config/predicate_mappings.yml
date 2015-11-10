@@ -61,11 +61,13 @@
     :is_image_of: isImageOf
     :is_audio_of: isAudioOf
     :is_document_of: isDocumentOf
+    :is_ereader_of: isEreaderOf
     :has_image: hasImage
     :has_audio: hasAudio
     :has_subcollection: hasSubcollection
     :has_crop: hasCrop
     :is_crop_of: isCropOf
+    :is_volume_of: isVolumeOf
     :is_exemplary_image_of: isExemplaryImageOf
     :is_following_image_of: isFollowingImageOf
     :is_preceding_image_of: isPrecedingImageOf
@@ -73,6 +75,9 @@
     :is_preceding_audio_of: isPrecedingAudioOf
     :is_following_document_of: isFollowingDocumentOf
     :is_preceding_document_of: isPrecedingDocumentOf
-    :is_transcription_of: isTranscriptionOf
+    :is_following_ereader_of: isFollowingEreaderOf
+    :is_preceding_ereader_of: isPrecedingEreaderOf
+    :is_following_volume_of: isFollowingVolumeOf
+    :is_preceding_volume_of: isPrecedingVolumeOf
   http://pcdm.org/models#:
     :administrative_set: AdministrativeSet
