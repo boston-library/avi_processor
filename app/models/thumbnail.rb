@@ -191,6 +191,11 @@ class Thumbnail
 
           end
 
+          #Fix for transparency
+          if url.split('.').last == '.png'
+            img.quantum_operator(Magick::MultiplyQuantumOperator, 0.3, Magick::AlphaChannel)
+          end
+
           #This is horrible. But if you don't do this, some PDF files won't come out right at all.
           #Multiple attempts have failed to fix this but perhaps the bug will be patched in ImageMagick.
           #To duplicate, one can use the PDF files at: http://libspace.uml.edu/omeka/files/original/7ecb4dc9579b11e2b53ccc2040e58d36.pdf
