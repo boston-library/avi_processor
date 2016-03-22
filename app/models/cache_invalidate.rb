@@ -6,10 +6,10 @@ class CacheInvalidate
 
 
     if args.has_key?("file_pid")
-      #file = ident_from_pid(args["file_pid"])
-      #File.delete(file) if File.exist?file
-
-
+      dir = ident_from_pid(args["file_pid"])
+      FileUtils.rm_rf(dir) if File.directory?(dir)
+      FileUtils.rm_rf("/var/cache/loris/#{args["file_pid"]}") if File.directory?("/var/cache/loris/#{args["file_pid"]}")
+      FileUtils.rm_rf("/var/cache/loris/https/#{args["file_pid"]}") if File.directory?("/var/cache/loris/https/#{args["file_pid"]}")
     elsif args.has_key?("object_pid")
       Bplmodels::File.find_in_batches('is_file_of_ssim'=>"info:fedora/#{args["object_pid"]}") do |group|
         group.each { |image_id|
@@ -17,6 +17,8 @@ class CacheInvalidate
           #File.delete(file) if File.exist?file
           dir = ident_from_pid(image_id['id'])
           FileUtils.rm_rf(dir) if File.directory?(dir)
+          FileUtils.rm_rf("/var/cache/loris/#{image_id['id']}") if File.directory?("/var/cache/loris/#{image_id['id']}")
+          FileUtils.rm_rf("/var/cache/loris/https/#{image_id['id']}") if File.directory?("/var/cache/loris/https/#{image_id['id']}")
         }
       end
     elsif args.has_key?("collection_pid")

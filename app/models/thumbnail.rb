@@ -192,8 +192,12 @@ class Thumbnail
           end
 
           #Fix for transparency
-          if url.split('.').last == '.png'
-            img.quantum_operator(Magick::MultiplyQuantumOperator, 0.3, Magick::AlphaChannel)
+          if img.matte
+            img_list = Magick::ImageList.new
+            img_list << img
+            img_list.new_image(img_list.first.columns, img_list.first.rows) { self.background_color = "white" } # Create new "layer" with white background and size of original image
+            img = img_list.reverse.flatten_images
+            img = img.quantum_operator(Magick::MultiplyQuantumOperator, 0.3, Magick::AlphaChannel)
           end
 
           #This is horrible. But if you don't do this, some PDF files won't come out right at all.
