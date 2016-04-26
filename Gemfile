@@ -63,7 +63,8 @@ gem 'rake'
 gem 'mini_magick', '4.2.10'
 
 #gem 'hydra-derivatives'
-gem 'hydra-derivatives', :git=> 'https://github.com/NLIreland/hydra-derivatives.git', :branch=> 'nli'
+#gem 'hydra-derivatives', :git=> 'https://github.com/NLIreland/hydra-derivatives.git', :branch=> 'nli'
+gem 'hydra-derivatives', :git=> 'https://github.com/NLIreland/hydra-derivatives.git', :branch=> 'nli', :ref => '252cabb'
 gem 'posix-spawn'
 
 gem 'nest', '~> 1.1.1'
