@@ -222,8 +222,63 @@ class Thumbnail
 
 
 
-      end
+        end
 
+    elsif args["system_type"] == "wgbh" && url_list.present?
+
+      max_retry = 2
+      sleep_time = 60 # In seconds
+      retry_count = 0
+
+      current_page = 0
+      total_colors = 0
+
+      url = url_list.first
+
+      img = nil
+
+      if @thumbnail_url.blank? && !AUDIO_TYPES.include?(url.split('.').last)
+
+        response = Typhoeus::Request.get(
+            url,
+            method: :get,
+            headers: {'Referer' => 'http://openvault.wgbh.org/' }
+        )
+
+        img =  Magick::Image.from_blob(response.body).first
+
+        #Fix for transparency
+        if img.matte
+          img_list = Magick::ImageList.new
+          img_list << img
+          img_list.new_image(img_list.first.columns, img_list.first.rows) { self.background_color = "white" } # Create new "layer" with white background and size of original image
+          img = img_list.reverse.flatten_images
+          img = img.quantum_operator(Magick::MultiplyQuantumOperator, 0.3, Magick::AlphaChannel)
+        end
+
+        #This is horrible. But if you don't do this, some PDF files won't come out right at all.
+        #Multiple attempts have failed to fix this but perhaps the bug will be patched in ImageMagick.
+        #To duplicate, one can use the PDF files at: http://libspace.uml.edu/omeka/files/original/7ecb4dc9579b11e2b53ccc2040e58d36.pdf
+        img = Magick::Image.from_blob( img.to_blob { self.format = "jpg" } ).first
+
+        thumb = img.resize_to_fit(300,300)
+
+
+        @object.thumbnail300.content = thumb.to_blob { self.format = "jpg" }
+        @object.thumbnail300.mimeType = 'image/jpeg'
+        @object.thumbnail300.dsLabel = url.split('/').last.gsub(/\....$/, '')
+
+        #@thumbnail_url = args["thumbnail_url"].present? ? args["thumbnail_url"] : @object.generate_thumbnail_url #Generate the thumbnail url
+        #FIXME: Temporary... no ARK Config...
+
+        @thumbnail_url = args["thumbnail_url"].present? ? args["thumbnail_url"] : @object.generate_thumbnail_url(config_hash)
+        @object.descMetadata.insert_location_url(@thumbnail_url, 'preview', nil)
+        @object.add_relationship(:is_image_of, "info:fedora/" + @object.pid)
+        @object.add_relationship(:is_exemplary_image_of, "info:fedora/" + @object.pid)
+
+
+
+      end
 
   end
 
