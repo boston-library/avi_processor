@@ -239,7 +239,7 @@ class Thumbnail
 
       if @thumbnail_url.blank? && !AUDIO_TYPES.include?(url.split('.').last)
 
-        response = Typhoeus::Request.get(
+        response = ::Typhoeus::Request.get(
             url,
             method: :get,
             headers: {'Referer' => 'http://openvault.wgbh.org/' }
