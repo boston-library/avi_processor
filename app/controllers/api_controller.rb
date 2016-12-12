@@ -9,28 +9,28 @@ class ApiController < ActionController::Base
     image_solr_response = []
     datastream = 'geoEncodedMaster'
 
-    expected_params = [:object_id, :image_id, :bbox, :token, :environment]
+    expected_params = ["object_id", "image_id", "bbox", "token", "environment"]
     expected_params.each do |key|
       if !params.keys.include? key
         errors += "Missing required key of: #{key.to_s}\n"
       end
     end
 
-    if params[:token] != token
+    if params["token"] != token
       errors += "Token is invalid. \n"
     end
 
     begin
-      ActiveFedora.init(:environment=>params[:environment])
+      ActiveFedora.init(:environment=>params["environment"])
     rescue
       errors += "Environment value is invalid. \n"
     end
 
     begin
-      image_solr_response = Bplmodels::Finder.getImageFiles(params[:object_id]).first["id"]
-      errors += "No Map Object Found for: #{params[:object_id]} \n" if image_solr_response.blank?
+      image_solr_response = Bplmodels::Finder.getImageFiles(params["object_id"]).first["id"]
+      errors += "No Map Object Found for: #{params["object_id"]} \n" if image_solr_response.blank?
     rescue
-      errors += "Problem loading images for: #{params[:object_id]} \n"
+      errors += "Problem loading images for: #{params["object_id"]} \n"
     end
 
     begin
@@ -42,7 +42,7 @@ class ApiController < ActionController::Base
 
 
     if errors.blank?
-      obj = ActiveFedora::Base.find(params[:object_id]).adapt_to_cmodel
+      obj = ActiveFedora::Base.find(params["object_id"]).adapt_to_cmodel
       image_obj = ActiveFedora::Base.find(image_solr_response[0]["id"]).adapt_to_cmodel
 
       image_obj.send(datastream).content = request.body.read
@@ -56,19 +56,17 @@ class ApiController < ActionController::Base
         end
       end
 
-      obj.descMetadata.mods(0).subject(subject_index).cartographics(0).coordinates = params[:bbox]
+      obj.descMetadata.mods(0).subject(subject_index).cartographics(0).coordinates = params["bbox"]
       obj.save
     end
 
     if errors.present?
       respond_to do |format|
-        format.status = :unauthorized
-        format.html { render text: errors }
-
+        format.html { render text: errors, status: 400 }
       end
     else
       respond_to do |format|
-        format.html { render text: "Successfully added GeoTIFF for #{params[:object_id]}" }
+        format.html { render text: "Successfully added GeoTIFF for #{params["object_id"]}" }
 
       end
     end

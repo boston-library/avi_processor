@@ -20,7 +20,7 @@ AviProcessor::Application.routes.draw do
   get "processor/objectcacheinvalidation"
 
   # Routes for the API
-  post '/api/geo_tiff_create', :to => 'api#geo_tiff_create', :as => 'geo_tiff_create'
+  post '/api/warped-maps', :to => 'api#geo_tiff_create', :as => 'geo_tiff_create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
