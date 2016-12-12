@@ -1,0 +1,8 @@
+defaults: &defaults
+  api_token: <insert here>
+development:
+  <<: *defaults
+test: &TEST
+  <<: *defaults
+production:
+  <<: *defaults
