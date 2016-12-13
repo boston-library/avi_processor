@@ -30,7 +30,7 @@ class ApiController < ActionController::Base
     # Refactor needed... but check a few things first before touching the backend
     if errors.present?
       respond_to do |format|
-        format.html { render text: "Token is invalid. \n", status: return_status }
+        format.html { render text: errors, status: return_status }
       end
     else
       image_solr_response = []
