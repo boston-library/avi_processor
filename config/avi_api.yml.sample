@@ -4,5 +4,7 @@ development:
   <<: *defaults
 test: &TEST
   <<: *defaults
-production:
+staging:
   <<: *defaults
+production:
+  api_token: <insert here>

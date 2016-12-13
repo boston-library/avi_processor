@@ -1,32 +1,40 @@
 class ApiController < ActionController::Base
 
-  def token
-    @pw ||= YAML.load_file(Rails.root.join('config', 'avi_api.yml'))[Rails.env]["api_token"]
+  def token(env)
+    YAML.load_file(Rails.root.join('config', 'avi_api.yml'))[env]["api_token"]
   end
 
   def geo_tiff_create
+    errors = ''
+    return_status = 400
+
+    expected_params = ["object_id", "image_id", "bbox", "token", "environment", "sha256hex"]
+    expected_params.each do |key|
+      if !params.keys.include? key
+        errors += "Missing required key of: #{key.to_s}\n"
+      end
+    end
+
+    begin
+      ActiveFedora.init(:environment=>params["environment"])
+    rescue
+      errors += "Environment value is invalid. \n"
+    end
+
     #Check token first... don't allow anything else if authentication isn't valid.
-    if params["token"].blank? || params["token"] != token
+    if errors.blank? and params["token"] != token(params[:environment])
+      errors += "Token is invalid. \n"
+      return_status = 401
+    end
+
+    # Refactor needed... but check a few things first before touching the backend
+    if errors.present?
       respond_to do |format|
-        format.html { render text: "Token is invalid. \n", status: 400 }
+        format.html { render text: "Token is invalid. \n", status: return_status }
       end
     else
-      errors = ''
       image_solr_response = []
       datastream = 'geoEncodedMaster'
-
-      expected_params = ["object_id", "image_id", "bbox", "token", "environment", "sha256hex"]
-      expected_params.each do |key|
-        if !params.keys.include? key
-          errors += "Missing required key of: #{key.to_s}\n"
-        end
-      end
-
-      begin
-        ActiveFedora.init(:environment=>params["environment"])
-      rescue
-        errors += "Environment value is invalid. \n"
-      end
 
       begin
         image_solr_response = Bplmodels::Finder.getImageFiles(params["object_id"]).first["id"]
@@ -36,8 +44,6 @@ class ApiController < ActionController::Base
           existing_check = image_solr_response.select { |row| row["id"] == params["image_id"] }
           errors += "Passed Image ID of: #{params["image_id"]} not found related to Map Object #{params["object_id"]} \n" if existing_check.blank?
         end
-
-
 
       rescue
         errors += "Problem loading images for: #{params["object_id"]} \n"
