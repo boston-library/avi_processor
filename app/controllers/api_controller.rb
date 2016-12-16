@@ -7,7 +7,7 @@ class ApiController < ActionController::Base
   def geo_tiff_create
     errors = ''
     return_status = 400
-    
+
     expected_params = ["object_id", "image_id", "bbox", "token", "environment", "sha256hex", "file_content"]
     expected_params.each do |key|
       if !params.keys.include? key
