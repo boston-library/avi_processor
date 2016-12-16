@@ -34,7 +34,7 @@ class ApiController < ActionController::Base
       end
     else
       image_solr_response = []
-      datastream = 'geoEncodedMaster'
+      datastream = 'geoRectifiedMaster'
 
       begin
         image_solr_response = Bplmodels::Finder.getImageFiles(params["object_id"])
