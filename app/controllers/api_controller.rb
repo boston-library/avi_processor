@@ -8,7 +8,7 @@ class ApiController < ActionController::Base
     errors = ''
     return_status = 400
 
-    expected_params = ["object_id", "image_id", "bbox", "token", "environment", "sha256hex", "file_content"]
+    expected_params = ["object_id", "image_id", "bbox", "token", "environment", "sha256hex", "geoTIFF"]
     expected_params.each do |key|
       if !params.keys.include? key
         errors += "Missing required key of: #{key.to_s}\n"
