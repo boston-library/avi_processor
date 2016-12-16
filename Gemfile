@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
-
+#gem 'sprockets-rails', :require => 'sprockets/rails/version'
+#gem 'sprockets-rails', '2.1.3'
+#gem 'rmagick', '2.15.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.3'
+gem 'rails', '4.2.3'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -45,8 +47,9 @@ end
 # gem 'debugger', group: [:development, :test]
 
 # HYDRA Dependencies
-gem 'hydra-head', '7.0.1'
-gem 'active-fedora', '7.0.4'
+gem 'hydra-head', '8.1.0'
+gem 'active-fedora', '8.0.1'
+gem 'hydra-access-controls', :git=>'https://github.com/boston-library/hydra-access-controls.git'
 
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 #gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'

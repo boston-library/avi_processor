@@ -7,8 +7,8 @@ class ApiController < ActionController::Base
   def geo_tiff_create
     errors = ''
     return_status = 400
-
-    expected_params = ["object_id", "image_id", "bbox", "token", "environment", "sha256hex"]
+    
+    expected_params = ["object_id", "image_id", "bbox", "token", "environment", "sha256hex", "file_content"]
     expected_params.each do |key|
       if !params.keys.include? key
         errors += "Missing required key of: #{key.to_s}\n"
@@ -37,7 +37,7 @@ class ApiController < ActionController::Base
       datastream = 'geoEncodedMaster'
 
       begin
-        image_solr_response = Bplmodels::Finder.getImageFiles(params["object_id"]).first["id"]
+        image_solr_response = Bplmodels::Finder.getImageFiles(params["object_id"])
         if image_solr_response.blank?
           errors += "No Images Found for map object: #{params["object_id"]} \n"
         else
@@ -49,11 +49,13 @@ class ApiController < ActionController::Base
         errors += "Problem loading images for: #{params["object_id"]} \n"
       end
 
+
       begin
-        errors += "Likely a bad geo tiff sent... very little data sent. \n" if request.body.read.size < 100000
-        errors += "SHA 256 hexdigest did not match the content received. \n" unless Digest::SHA256.hexdigest(request.body.read) == params['sha256hex']
+        file_content = params["geoTIFF"].read
+        errors += "Likely a bad geo tiff sent... very little data sent. \n" if file_content.size < 100000
+        errors += "SHA 256 hexdigest did not match the content received. \n" unless Digest::SHA256.hexdigest(file_content) == params['sha256hex']
       rescue
-        errors += "Couldn't read the request body... did you send the geo tiff data correctly? \n"
+        errors += "Couldn't read the geo TIFF information... did you send the geo tiff data correctly? \n"
       end
 
 
@@ -63,7 +65,7 @@ class ApiController < ActionController::Base
           obj = ActiveFedora::Base.find(params["object_id"]).adapt_to_cmodel
           image_obj = ActiveFedora::Base.find(params["image_id"]).adapt_to_cmodel
 
-          image_obj.send(datastream).content = request.body.read
+          image_obj.send(datastream).content = file_content
           image_obj.save
 
           subject_index = obj.descMetadata.mods(0).subject.count
@@ -94,9 +96,6 @@ class ApiController < ActionController::Base
         end
       end
     end
-
-
-
 
   end
 
