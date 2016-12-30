@@ -162,7 +162,12 @@ class Thumbnail
 
           else
 
-            until total_colors > 1 do
+            until (total_colors > 1) do
+
+              if current_page == url_list.size
+                raise "Could not find a page that was not blank with url_list: #{url_list}"
+                break
+              end
 
               begin
                 if retry_count > 0
@@ -185,10 +190,6 @@ class Thumbnail
               total_colors = img.total_colors
 
               current_page = current_page + 1
-
-              if current_page > url_list.size
-                raise "Could not find a page that was not blank with url_list: #{url_list}"
-              end
 
               url = url_list[current_page] unless total_colors > 1 #FIXME: Should be more consistent with the until condition....
             end
