@@ -67,7 +67,8 @@ class ApiController < ActionController::Base
 
           image_obj.send(datastream).content = file_content
           image_obj.send(datastream).mimeType = 'image/tiff'
-          image_obj.send(datastream).dsLabel = params[:geoTIFF].original_filename.gsub(/\.(tif|TIF|jpg|JPG|jpeg|JPEG|jp2|JP2|png|PNG|txt|TXT)$/, '')
+          #image_obj.send(datastream).dsLabel = params[:geoTIFF].original_filename.gsub(/\.(tif|TIF|jpg|JPG|jpeg|JPEG|jp2|JP2|png|PNG|txt|TXT)$/, '')
+          image_obj.send(datastream).dsLabel = image_obj.productionMaster.dsLabel + "_geo"
           image_obj.save
 
           subject_index = obj.descMetadata.mods(0).subject.count
