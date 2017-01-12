@@ -34,7 +34,7 @@ class ApiController < ActionController::Base
       end
     else
       image_solr_response = []
-      datastream = 'geoRectifiedMaster'
+      datastream = 'georectifiedMaster'
 
       begin
         image_solr_response = Bplmodels::Finder.getImageFiles(params["object_id"])
@@ -66,6 +66,8 @@ class ApiController < ActionController::Base
           image_obj = ActiveFedora::Base.find(params["image_id"]).adapt_to_cmodel
 
           image_obj.send(datastream).content = file_content
+          image_obj.send(datastream).mimeType = 'image/tiff'
+          image_obj.send(datastream).dsLabel = params[:geoTIFF].original_filename.gsub(/\.(tif|TIF|jpg|JPG|jpeg|JPEG|jp2|JP2|png|PNG|txt|TXT)$/, '')
           image_obj.save
 
           subject_index = obj.descMetadata.mods(0).subject.count
