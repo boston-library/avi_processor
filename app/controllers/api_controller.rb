@@ -49,7 +49,6 @@ class ApiController < ActionController::Base
         errors += "Problem loading images for: #{params["object_id"]} \n"
       end
 
-
       begin
         file_content = params["geoTIFF"].read
         errors += "Likely a bad geo tiff sent... very little data sent. \n" if file_content.size < 100000
@@ -57,8 +56,6 @@ class ApiController < ActionController::Base
       rescue
         errors += "Couldn't read the geo TIFF information... did you send the geo tiff data correctly? \n"
       end
-
-
 
       if errors.blank?
         begin
@@ -71,15 +68,21 @@ class ApiController < ActionController::Base
           image_obj.send(datastream).dsLabel = image_obj.productionMaster.dsLabel + "_geo"
           image_obj.save
 
-          subject_index = obj.descMetadata.mods(0).subject.count
-          0.upto subject_index-1 do |pos|
-            if obj.descMetadata.mods(0).subject(pos).geographic.blank? and obj.descMetadata.mods(0).subject(pos).authority.blank? and obj.descMetadata.mods(0).subject(pos).cartographics(0).coordinates.present?
-              subject_index = pos
+          subject_count = obj.descMetadata.mods(0).subject.count
+          subject_index = nil
+          0.upto(subject_count - 1) do |index|
+            if obj.descMetadata.mods(0).subject(index).cartographics(0).coordinates.present? &&
+               obj.descMetadata.mods(0).subject(index).cartographics(0).coordinates[0] =~ /[-]*[\d\.]+ [-]*[\d\.]+ [-]*[\d\.]+ [-]*[\d\.]+/
+              subject_index = index
               break
             end
           end
+          if subject_index
+            obj.descMetadata.mods(0).subject(subject_index).cartographics(0).coordinates(0, params["bbox"])
+          else
+            obj.descMetadata.mods(0).subject(subject_count).cartographics(0).coordinates = params["bbox"]
+          end
 
-          obj.descMetadata.mods(0).subject(subject_index).cartographics(0).coordinates = params["bbox"]
           obj.save
         rescue => error
           errors += "Problem saving the image or coordinates. \n"
@@ -95,7 +98,6 @@ class ApiController < ActionController::Base
       else
         respond_to do |format|
           format.html { render text: "Successfully added GeoTIFF for #{params["object_id"]}" }
-
         end
       end
     end
