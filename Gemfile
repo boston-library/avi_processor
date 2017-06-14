@@ -54,6 +54,8 @@ gem 'hydra-access-controls', :git=>'https://github.com/boston-library/hydra-acce
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 #gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'
 
+gem 'nokogiri', '1.6.8.1'
+
 #gem "resque", "~> 2.0.0.pre.1", github: "resque/resque"
 gem "resque", '~> 1.25.2'
 
