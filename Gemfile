@@ -53,6 +53,7 @@ gem 'hydra-access-controls', :git=>'https://github.com/boston-library/hydra-acce
 
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 #gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'
+gem 'libxml-ruby', '>= 0.8.3'
 
 gem 'nokogiri', '1.6.8.1'
 
