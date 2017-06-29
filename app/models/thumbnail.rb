@@ -52,22 +52,36 @@ class Thumbnail
             current_page = -1
             total_colors = 0
 
-            until total_colors > 1 do
+            until total_colors > 1 || current_page > 10 do
               current_page = current_page + 1
 
               if url.include?('amazonaws') #Can't do paging as signature is off then 0.o
-                img = Magick::Image.read(url){
-                  self.quality = 100
-                  self.density = 200
-                }.first
+                begin
+                  img = Magick::Image.read(url){
+                    self.quality = 100
+                    self.density = 200
+                  }.first
+                  total_colors = img.total_colors
+                rescue Magick::ImageMagickError => error
+                  #See http://sailsinc.omeka.net/oai-pmh-repository/request?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:sailsinc.omeka.net:306
+                  # It doesn't process right with RMagick
+                  # Can't get Density or Quality to work with MiniMagick but may be a workaround. Can get total colors with: img["%[k]"]
+                  if error.message.include?('must specify image size')
+                    img = MiniMagick::Image.open(url)
+                    total_colors = img["%[k]"].to_i
+                  else
+                    raise error
+                  end
+                end
+                current_page = 10000 # not doing paging for amazonaws currently so cause an exit
               else
                 img = Magick::Image.read(url.gsub('.pdf', '.pdf[' + current_page.to_s + ']')){
                   self.quality = 100
                   self.density = 200
                 }.first
+                total_colors = img.total_colors
               end
 
-              total_colors = img.total_colors
             end
 
             @thumbnail_url = @object.generate_thumbnail_url(config_hash)
@@ -83,10 +97,18 @@ class Thumbnail
               @thumbnail_url = url.gsub('/files/', '/square_thumbnails/').gsub(/\.\w+$/, '') + '.jpg'
               img =  Magick::Image.read(@thumbnail_url).first
             else
-              #@thumbnail_url = @object.generate_thumbnail_url
-              #FIXME:
               @thumbnail_url = @object.generate_thumbnail_url(config_hash)
-              img =  Magick::Image.read(url).first
+              begin
+                img = Magick::Image.read(url).first
+              rescue Magick::ImageMagickError => error
+                # Uses MineMagick here due to an error trying to process the image of the following with RMagick
+                # http://sailsinc.omeka.net/oai-pmh-repository/request?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:sailsinc.omeka.net:264
+                if error.message.include?('must specify image size')
+                  img =  MiniMagick::Image.open(url)
+                else
+                  raise error
+                end
+              end
             end
           end
 
