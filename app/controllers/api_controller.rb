@@ -59,6 +59,7 @@ class ApiController < ActionController::Base
 
       if errors.blank?
         begin
+          logger.info "AF ENV = #{ActiveFedora.config.credentials[:url]}"
           obj = ActiveFedora::Base.find(params["object_id"]).adapt_to_cmodel
           image_obj = ActiveFedora::Base.find(params["image_id"]).adapt_to_cmodel
 
@@ -72,7 +73,7 @@ class ApiController < ActionController::Base
           subject_index = nil
           0.upto(subject_count - 1) do |index|
             if obj.descMetadata.mods(0).subject(index).cartographics(0).coordinates.present? &&
-               obj.descMetadata.mods(0).subject(index).cartographics(0).coordinates[0] =~ /[-]*[\d\.]+ [-]*[\d\.]+ [-]*[\d\.]+ [-]*[\d\.]+/
+                obj.descMetadata.mods(0).subject(index).cartographics(0).coordinates[0] =~ /[-]*[\d\.]+ [-]*[\d\.]+ [-]*[\d\.]+ [-]*[\d\.]+/
               subject_index = index
               break
             end
@@ -80,7 +81,32 @@ class ApiController < ActionController::Base
           if subject_index
             obj.descMetadata.mods(0).subject(subject_index).cartographics(0).coordinates(0, params["bbox"])
           else
+            # the below should work, but it doesn't
+            ### obj.descMetadata.mods(0).subject(subject_count).cartographics(0).coordinates = params["bbox"]
+
+            # there seems to be a bug with this app on production ONLY (GLSTAVIPRO001),
+            # where OM-based operations to insert nodes are not working correctly
+            # can't seem to create new subject and assign children at same time
+            # get error: NoMethodError: undefined method `children' for nil:NilClass
+            # from /home/avi/.rvm/gems/ruby-2.1.2/gems/om-3.1.1/lib/om/xml/terminology.rb:170:in `retrieve_node_subsequent'
+
+            # it works fine on local machine (and in Commonwealth_2), can't figure out the issue
+            # the below the only workaround that doesn't cause an error
+            # spent TWO DAYS trying to debug this, including the following steps:
+            # 1. copying Gemfile.lock from working local app onto production
+            #    (still didn't work, even though all gems same as on local )
+            # 2. installed Commonwealth_2 on GLSTAVIPRO001
+            #    (code works fine in Commonwealth_2, so not an issue with system libraries)
+            rand_str = (0..9).to_a.shuffle[0,9].join
+            obj.descMetadata.insert_subject_topic(rand_str) # have to explicitly create new subject
+            obj.descMetadata.mods(0).subject(subject_count).cartographics = ''
             obj.descMetadata.mods(0).subject(subject_count).cartographics(0).coordinates = params["bbox"]
+            # now remove 'random' which was added to the wrong subject
+            obj.descMetadata.mods(0).subject.each_with_index do |_subject, index|
+              if obj.descMetadata.mods(0).subject(index).topic[0] == rand_str
+                obj.descMetadata.mods(0).subject(index).topic(0, nil)
+              end
+            end
           end
 
           obj.save
