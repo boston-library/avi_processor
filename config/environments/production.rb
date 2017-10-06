@@ -45,6 +45,9 @@ AviProcessor::Application.configure do
   # Set to :debug to see everything in the log.
   config.log_level = :info
 
+  # rolling logs, no more than 10 files, 100MB max size each
+  config.logger = Logger.new("#{Rails.root}/log/#{Rails.env}.log", 10, 104857600)
+
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
