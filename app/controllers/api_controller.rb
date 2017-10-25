@@ -60,8 +60,8 @@ class ApiController < ActionController::Base
       if errors.blank?
         begin
           logger.info "AF ENV = #{ActiveFedora.config.credentials[:url]}"
-          obj = ActiveFedora::Base.find(params["object_id"]).adapt_to_cmodel
-          image_obj = ActiveFedora::Base.find(params["image_id"]).adapt_to_cmodel
+          obj = Bplmodels::ObjectBase.find(params["object_id"]).adapt_to_cmodel
+          image_obj = Bplmodels::File.find(params["image_id"]).adapt_to_cmodel
 
           image_obj.send(datastream).content = file_content
           image_obj.send(datastream).mimeType = 'image/tiff'
