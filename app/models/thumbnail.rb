@@ -123,7 +123,7 @@ class Thumbnail
           @object.thumbnail300.mimeType = 'image/jpeg'
           @object.thumbnail300.dsLabel = url.split('/').last.gsub(/\....$/, '')
 
-          @object.descMetadata.insert_location_url(@thumbnail_url, nil, 'preview')
+          @object.descMetadata.insert_location_url(@thumbnail_url, 'preview', nil)
           @object.add_relationship(:is_image_of, "info:fedora/" + @object.pid)
           @object.add_relationship(:is_exemplary_image_of, "info:fedora/" + @object.pid)
         end
