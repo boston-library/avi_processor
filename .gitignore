@@ -28,6 +28,7 @@ role_map_development.yml
 role_map_production.yml
 role_map_test.yml
 ark.yml
+avi_api.yml
 omniauth-polaris.yml
 bpl_config.yml
 omniauth-facebook.yml

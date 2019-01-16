@@ -49,13 +49,13 @@ end
 # HYDRA Dependencies
 gem 'hydra-head', '8.1.0'
 gem 'active-fedora', '8.0.1'
-gem 'hydra-access-controls', :git=>'https://github.com/boston-library/hydra-access-controls.git'
+gem 'hydra-access-controls', :git=>'https://github.com/boston-library/hydra-access-controls.git',  :ref => '4ce7aa2'
 
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 #gem 'bplmodels', :path => '/home/bluewolf/bpl/bplmodels'
 gem 'libxml-ruby', '>= 0.8.3'
 
-gem 'nokogiri', '1.6.8.1'
+gem 'nokogiri', '>= 1.8.2'
 
 #gem "resque", "~> 2.0.0.pre.1", github: "resque/resque"
 gem "resque", '~> 1.25.2'
